@@ -3,4 +3,4 @@ class conf:
     database = "sandwich_maker_api"
     port = 3306
     user = "root"
-    password = "e2b*04Km*0514"
+    password = "password"
