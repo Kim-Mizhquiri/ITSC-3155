@@ -8,6 +8,7 @@ from .dependencies.database import engine, get_db
 
 from .controllers import order_details
 from .controllers import recipes
+from .controllers import resources
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -127,3 +128,34 @@ def delete_one_recipe(recipe_id: int, db: Session = Depends(get_db)):
     if recipe is None:
         raise HTTPException(status_code=404, detail="Recipe not found")
     return recipes.delete(db=db, recipe_id=recipe_id)
+
+# RESOURCES CONTROLLER ENDPOINTS
+
+@app.post("/resources/", response_model=schemas.Resource, tags=["Resources"])
+def create_resource(resource: schemas.ResourceCreate, db: Session = Depends(get_db)):
+    return resources.create(db=db, resource=resource)
+
+@app.get("/resources/", response_model=list[schemas.Resource], tags=["Resources"])
+def read_resources(db: Session = Depends(get_db)):
+    return resources.read_all(db)
+
+@app.get("/resources/{resource_id}", response_model=schemas.Resource, tags=["Resources"])
+def read_one_resource(resource_id: int, db: Session = Depends(get_db)):
+    resource = resources.read_one(db, resource_id=resource_id)
+    if resource is None:
+        raise HTTPException(status_code=404, detail="Resource not found")
+    return resource
+
+@app.put("/resources/{resource_id}", response_model=schemas.Resource, tags=["Resources"])
+def update_one_resource(resource_id: int, resource: schemas.ResourceUpdate, db: Session = Depends(get_db)):
+    resource_db = resources.read_one(db, resource_id=resource_id)
+    if resource_db is None:
+        raise HTTPException(status_code=404, detail="Resource not found")
+    return resources.update(db=db, resource=resource, resource_id=resource_id)
+
+@app.delete("/resources/{resource_id}", tags=["Resources"])
+def delete_one_resource(resource_id: int, db: Session = Depends(get_db)):
+    resource = resources.read_one(db, resource_id=resource_id)
+    if resource is None:
+        raise HTTPException(status_code=404, detail="Resource not found")
+    return resources.delete(db=db, resource_id=resource_id)
