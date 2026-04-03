@@ -13,7 +13,7 @@ def create(db: Session, order):
     db.add(db_order)
     # Commit the changes to the database
     db.commit()
-    # Refresh the Order object to ensure it reflects the current state in the database
+    # Refresh the order object to ensure it reflects the current state in the database
     db.refresh(db_order)
     # Return the newly created Order object
     return db_order

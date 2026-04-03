@@ -3,7 +3,7 @@ from fastapi import Response, status
 from ..models import models, schemas
 
 def create(db: Session, sandwich: schemas.SandwichCreate):
-    # Create a new instance of the sandwich model
+    # create a new instance of the sandwich model
     db_sandwich = models.Sandwich(
         sandwich_name=sandwich.sandwich_name,
         price=sandwich.price
